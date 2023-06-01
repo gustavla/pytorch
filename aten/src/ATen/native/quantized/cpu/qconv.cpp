@@ -80,6 +80,7 @@ inline int64_t compute_deconv_shape(int64_t input,
                                     int64_t input_padding,
                                     int64_t output_padding,
                                     int64_t dilation) {
+  // kernel: 3, stride: 2, input padding: 0, output padding: 0, dilation: 1
   int64_t out = (input - 1) * stride - 2 * input_padding
                 + dilation * (kernel - 1) + output_padding + 1;
   return out;
@@ -115,6 +116,8 @@ at::SmallVector<int64_t, kSpatialDim + 2> MakeDeConvOutputShape(
     TORCH_CHECK(output_shape[idx + 2] < kReasonableMaxDim,
                 "Output dimension is beyound reasonable maximum for ", idx,
                 " axis;"
+                " input_shape[idx]: ", input_shape[idx + 2],
+                " output_shape[idx]: ", output_shape[idx + 2],
                 " kernel: ", kernel[idx],
                 ", stride: ", stride[idx],
                 ", input padding: ", input_padding[idx],
@@ -962,7 +965,7 @@ at::Tensor PackedConvWeightsQnnp<kSpatialDim>::apply_impl(
     output_shape = MakeDeConvOutputShape<kSpatialDim>(
         N,
         M,
-        {H, W},
+        kSpatialDim == 2 ? std::vector<int64_t>{H, W} : std::vector<int64_t>{D, H, W},
         kernel_,
         stride(),
         padding(),
