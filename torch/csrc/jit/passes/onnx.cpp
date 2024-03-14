@@ -299,7 +299,7 @@ void NodeToONNX(
         if (old->hasDebugName() && !exist_in_env) {
           auto old_name = outputs[i]->debugName();
           auto new_name = old->debugNameBase();
-          auto debug_names = new_block->owningGraph()->debugNames();
+          const auto& debug_names = new_block->owningGraph()->debugNames();
           auto exist_name = debug_names.find(new_name);
           outputs[i]->setDebugName(new_name);
           if (exist_name != debug_names.end()) {
