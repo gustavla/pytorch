@@ -1771,6 +1771,7 @@ def _run_symbolic_method(g, op_name, symbolic_fn, args):
             original_node=None,  # type: ignore[arg-type]
             params_dict=_params_dict,
             env={},
+            values_in_env=set(),
         )
         return symbolic_fn(graph_context, *args)
     except TypeError as e:
@@ -1885,6 +1886,7 @@ def _run_symbolic_function(
     node: _C.Node,
     inputs: Any,
     env: Dict[_C.Value, _C.Value],
+    values_in_env: Set[_C.Value],
     operator_export_type=_C_onnx.OperatorExportTypes.ONNX,
 ) -> Optional[Union[_C.Value, Sequence[Optional[_C.Value]]]]:
     """Runs a symbolic function.
@@ -1915,6 +1917,7 @@ def _run_symbolic_function(
         original_node=node,
         params_dict=_params_dict,
         env=env,
+        values_in_env=values_in_env,
     )
 
     # Direct ATen export requested
