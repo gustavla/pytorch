@@ -73,6 +73,7 @@ class ConstantValueMap {
   static ShapeDataMap& GetInferredShapeData();
 
   static SymbolDimMap& GetSymbolDimMap();
+  static DimSymbolMap& GetDimSymbolMap();
 
   static void UpdateValueName(
       const std::string& old_name,
@@ -107,6 +108,7 @@ class ConstantValueMap {
   // during future node-level shape inference.
   ShapeDataMap inferredShapeData;
   SymbolDimMap symbolDimMap;
+  DimSymbolMap dimSymbolMap;
   // Stores if all graph-level inputs have static shape
   c10::optional<bool> allGraphInputsStatic;
   // True if reliable has been computed for all graph inputs
