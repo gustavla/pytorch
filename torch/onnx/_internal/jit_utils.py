@@ -35,6 +35,8 @@ class GraphContext:
         params_dict: Mapping from graph initializer name to IValue.
         env: Mapping from Torch domain graph Value to ONNX domain graph Value.
         values_in_env: Set of all values in env
+        new_nodes: List that tracks all new nodes that are added (used to make
+            sure metadata is propagated to all new nodes).
     """
 
     graph: _C.Graph
@@ -44,6 +46,7 @@ class GraphContext:
     params_dict: Dict[str, "_C.IValue"]
     env: Dict[_C.Value, _C.Value]
     values_in_env: Set[_C.Value]
+    new_nodes: List[_C.Node] = dataclasses.field(default_factory=list)
 
     # Relay methods from _C.Graph for compatibility with symbolic functions that expect
     # a _C.Graph
